@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "../redux/userSlice";
-import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "../index.css"; // Import CSS
+import axios from "axios";
 
 
 function Register() {
@@ -13,7 +10,6 @@ function Register() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,8 +27,8 @@ function Register() {
 
   const handleRegister = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      dispatch(login({ user: userCredential.user }));
+      const res = await axios.post("http://localhost:5000/api/auth/register", { name, email, password, phone, address });
+      alert(res.data);
       navigate("/home");
     } catch (error) {
       alert("Registration failed: " + error.message);

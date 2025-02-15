@@ -17,8 +17,9 @@ function Login() {
   // Handle Email Login
   const handleEmailLogin = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      dispatch(login({ user: userCredential.user }));
+      const userCredential = await axios.post("http://localhost:5000/api/auth/login", { email, password })
+      console.log( userCredential.data.user )
+      dispatch(login({ user: userCredential.data.user }));
       navigate("/home");
     } catch (error) {
       alert("Login failed: " + error.message);
