@@ -34,4 +34,22 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// ✅ Check if user exists
+router.get("/check-user", async (req, res) => {
+  try {
+    const { email } = req.query;
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.json({ exists: true });
+    } else {
+      return res.json({ exists: false });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+
 module.exports = router;
