@@ -7,7 +7,7 @@ function AdminPanel() {
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({ name: "", price: "" });
-  const [editProduct, setEditProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState({image:""});
   const [updatedStatus, setUpdatedStatus] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -43,7 +43,7 @@ function AdminPanel() {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       const res = await axios.post("http://localhost:5000/api/admin/products", newProduct, config);
       setProducts([...products, res.data]);
-      setNewProduct({ name: "", price: "" });
+      setNewProduct({ name: "", price: "", description: "", category: "Fruits", stock: "", image: "" });
       setShowAddModal(false);
     } catch (error) {
       alert("Failed to add product");
@@ -82,6 +82,7 @@ function AdminPanel() {
   const handleUpdateProduct = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
+      console.log(editProduct );
       const res = await axios.put(`http://localhost:5000/api/admin/products/${editProduct._id}`, editProduct, config);
       setProducts(products.map(product => (product._id === editProduct._id ? res.data : product)));
       setEditProduct(editProduct);
@@ -173,18 +174,27 @@ function AdminPanel() {
         <div className="modal">
           <div className="modal-content">
             <h3>Add Product</h3>
+            <input type="text" placeholder="Product Name" value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} />
+            <input type="number" placeholder="Price" value={newProduct.price} onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })} />
             <input
               type="text"
-              placeholder="Product Name"
-              value={newProduct.name}
-              onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+              placeholder="Enter Image Link"
+              value={newProduct.image}
+              onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
             />
-            <input
-              type="number"
-              placeholder="Price"
-              value={newProduct.price}
-              onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-            />
+
+            <textarea placeholder="Description" value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}></textarea>
+            <select value={newProduct.category} onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}>
+              <option value="Fruits">Fruits</option>
+              <option value="Dry Fruits">Dry Fruits</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Bakery">Bakery</option>
+              <option value="Meat">Meat</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Other">Other</option>
+            </select>
+            <input type="number" placeholder="Stock" value={newProduct.stock} onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })} />
             <button onClick={handleAddProduct} className="save-btn">Add Product</button>
             <button onClick={() => setShowAddModal(false)} className="close-btn">Cancel</button>
           </div>
@@ -196,16 +206,26 @@ function AdminPanel() {
         <div className="modal">
           <div className="modal-content">
             <h3>Edit Product</h3>
+            <input type="text" value={editProduct.name} onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })} />
+            <input type="number" value={editProduct.price} onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })} />
             <input
-              type="text"
-              value={editProduct.name}
-              onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })}
-            />
-            <input
-              type="number"
-              value={editProduct.price}
-              onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })}
-            />
+                type="text"
+                placeholder="Enter Image Link"
+                value={editProduct.image}
+                onChange={(e) => setEditProduct({ ...editProduct, image: e.target.value })}
+              />
+            <textarea value={editProduct.description} onChange={(e) => setEditProduct({ ...editProduct, description: e.target.value })}></textarea>
+            <select value={editProduct.category} onChange={(e) => setEditProduct({ ...editProduct, category: e.target.value })}>
+              <option value="Fruits">Fruits</option>
+              <option value="Dry Fruits">Dry Fruits</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Bakery">Bakery</option>
+              <option value="Meat">Meat</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Other">Other</option>
+            </select>
+            <input type="number" value={editProduct.stock} onChange={(e) => setEditProduct({ ...editProduct, stock: e.target.value })} />
             <button onClick={handleUpdateProduct} className="save-btn">Save Changes</button>
             <button onClick={() => setShowEditModal(false)} className="close-btn">Cancel</button>
           </div>
