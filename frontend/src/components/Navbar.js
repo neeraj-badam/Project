@@ -59,7 +59,7 @@ function Navbar() {
           </>
         ) : (
           <>
-            <span style={{ marginRight: "10px" }}>Welcome, {user?.displayName || admin?.email || driver.name}</span>
+            <span style={{ marginRight: "10px" }}>Welcome, {user?.displayName || driver?.name || admin?.email || "Admin"}</span>
             <button onClick={handleLogout} style={{ background: "red", color: "white", padding: "5px 10px", border: "none", cursor: "pointer" }}>Logout</button>
           </>
         )}
